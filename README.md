@@ -1,4 +1,4 @@
-## computed 计算属性
+## [watch 侦听](https://kailoveq.github.io/Vue-demo-3-watach/dist/index.html)
 ### 用途
 * 当数据发生变化时，执行一个函数
 * 例1：撤销
