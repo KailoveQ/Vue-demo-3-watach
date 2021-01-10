@@ -1,0 +1,9 @@
+{"scripts": {
+  "build": "rm -rf dist && parcel build src/index.html --no-minify --public-url ./"
+},
+  "name": "vue-demo-3-watch",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Kai <1114366961@qq.com>",
+  "license": "MIT"
+}
