@@ -120,50 +120,53 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 })({"epB2":[function(require,module,exports) {
 var Vue = window.Vue;
 Vue.config.productionTip = false;
-var id = 0;
-
-var createUser = function createUser(name, gender) {
-  id += 1;
-  return {
-    id: id,
-    name: name,
-    gender: gender
-  };
-};
-
 new Vue({
-  data: function data() {
-    return {
-      users: [createUser('方方', '男'), createUser('若愚', '男'), createUser('茜茜', '女'), createUser('糖糖', '女')],
-      gender: ""
-    };
+  data: {
+    n: 0,
+    history: [],
+    inUndoMode: false
   },
-  computed: {
-    dpUsers: function dpUsers() {
-      var hash = {
-        male: "男",
-        female: "女"
-      };
-      var users = this.users,
-          gender = this.gender;
+  watch: {
+    n: function n(newValue, oldValue) {
+      console.log(this.inUndoMode);
 
-      if (gender === "") {
-        return users;
-      } else if (typeof gender === "string") {
-        return users.filter(function (u) {
-          return u.gender === hash[gender];
+      if (!this.inUndoMode) {
+        this.history.push({
+          from: oldValue,
+          to: newValue
         });
-      } else {
-        throw new Error("gender 的值是以外的值");
       }
     }
   },
+  // 不如用 computed 来计算 displayName
+  template: "\n      <div>\n        {{n}}\n        <hr />\n        <button @click=\"add1\">+1</button>\n        <button @click=\"add2\">+2</button>\n        <button @click=\"minus1\">-1</button>\n        <button @click=\"minus2\">-2</button>\n        <hr/>\n        <button @click=\"undo\">\u64A4\u9500</button>\n        <hr/>\n  \n        {{history}}\n      </div>\n    ",
   methods: {
-    setGender: function setGender(string) {
-      this.gender = string;
+    add1: function add1() {
+      this.n += 1;
+    },
+    add2: function add2() {
+      this.n += 2;
+    },
+    minus1: function minus1() {
+      this.n -= 1;
+    },
+    minus2: function minus2() {
+      this.n -= 2;
+    },
+    undo: function undo() {
+      var _this = this;
+
+      var last = this.history.pop();
+      this.inUndoMode = true;
+      console.log("ha" + this.inUndoMode);
+      var old = last.from;
+      this.n = old; // watch n 的函数会异步调用
+
+      this.$nextTick(function () {
+        _this.inUndoMode = false;
+      });
     }
-  },
-  template: "\n    <div>\n        <button @click=\"setGender('')\">\u5168\u90E8</button>\n        <button @click=\"setGender('male')\">\u7537</button>\n        <button @click=\"setGender('female')\">\u5973</button>\n        <ul>\n            <li v-for=\"(u,index) in dpUsers\" :key=\"index\">{{u.name}} - {{u.gender}}</li>\n        </ul>\n    </div>\n    "
+  }
 }).$mount("#app");
 },{}]},{},["epB2"], null)
-//# sourceMappingURL=main.c961ece6.js.map
+//# sourceMappingURL=main.86c9e1a4.js.map
